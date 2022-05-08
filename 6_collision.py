@@ -103,6 +103,7 @@ while running:
     print("충동했어요")
     running = False
 
+
   screen.blit(background, (0,0))  # 배경 그리기
 
   screen.blit(character, (character_x_pos, character_y_pos))  # 캐릭터 그리기

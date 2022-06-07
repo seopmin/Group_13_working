@@ -34,6 +34,8 @@ def record_score():
 
 def gameStart():
     global screen
+    global SCORE
+    SCORE = 0
     # 화면 크기 정보
     SCREEN_WIDTH = 720
     SCREEN_HEIGHT = 720
@@ -74,6 +76,11 @@ def gameStart():
     ddong_3_height = ddong_image.get_size()[1]
     ddong_3_pos_x = random.randint(0, SCREEN_WIDTH - ddong_width+1)
     ddong_3_pos_y = -3*random.randint(ddong_height, 300)
+
+    ddong_4_width = ddong_image.get_size()[0]
+    ddong_4_height = ddong_image.get_size()[1]
+    ddong_4_pos_x = random.randint(0, SCREEN_WIDTH - ddong_width + 1)
+    ddong_4_pos_y = -2 * random.randint(ddong_height, 300)
 
 
 
@@ -130,6 +137,14 @@ def gameStart():
             ddong_3_pos_x = random.randint(0, SCREEN_WIDTH - ddong_3_width + 1)
             ddong_3_pos_y = -3*random.randint(ddong_3_height, 200)
 
+        if SCORE > 500:
+            ddong_4_pos_y += 700 * clock.get_time() / 1000
+
+            if ddong_4_pos_y > SCREEN_HEIGHT - platform_height - ddong_4_height:
+                increase_score()
+                ddong_4_pos_x = random.randint(0, SCREEN_WIDTH - ddong_4_width + 1)
+                ddong_4_pos_y = -3 * random.randint(ddong_4_height, 200)
+
         # 각종 처리(충돌)
         player_rect = player_image.get_rect()
         player_rect.x = player_pos_x
@@ -138,6 +153,7 @@ def gameStart():
         ddong_rect = ddong_image.get_rect()
         ddong_2_rect = ddong_image.get_rect()
         ddong_3_rect = ddong_image.get_rect()
+        ddong_4_rect = ddong_image.get_rect()
 
 
         ddong_2_rect.x = ddong_2_pos_x
@@ -146,6 +162,8 @@ def gameStart():
         ddong_rect.y = ddong_pos_y
         ddong_3_rect.y = ddong_3_pos_y
         ddong_3_rect.x = ddong_3_pos_x
+        ddong_4_rect.x = ddong_4_pos_x
+        ddong_4_rect.y = ddong_4_pos_y
 
         # 충돌 검사
         if player_rect.colliderect(ddong_rect):
@@ -160,12 +178,18 @@ def gameStart():
             print(SCORE)
             is_running = False
 
+        if player_rect.colliderect(ddong_4_rect):
+            print(SCORE)
+            is_running = False
+
         #랜더(그리기)
         screen.blit(background_image, (0, 0))
         screen.blit(player_image, (player_pos_x, player_pos_y))
         screen.blit(ddong_image, (ddong_pos_x, ddong_pos_y))
         screen.blit(ddong_image, (ddong_2_pos_x, ddong_2_pos_y))
         screen.blit(ddong_image, (ddong_3_pos_x, ddong_3_pos_y))
+        if SCORE > 500:
+            screen.blit(ddong_image, (ddong_4_pos_x, ddong_4_pos_y))
 
         # 디스플레이 업데이트
         draw_score()
